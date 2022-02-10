@@ -31,6 +31,8 @@ export const fetchUser = (userId) => (dispatch) => {
   _fetchUser(userId, dispatch);
 }
 
+//This will limit us to only 1 fetch of the same user, during the entire use of the application
+// so if you'd like to fetch it again, you wouldn't be able to do it
 const _fetchUser = _.memoize( async (userId, dispatch) => {
   const response = await jsonPlaceholder.get(`/users/${userId}`);
 
