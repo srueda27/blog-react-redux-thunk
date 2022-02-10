@@ -1,3 +1,5 @@
+import _ from "lodash";
+
 import jsonPlaceholder from "../apis/jsonPlaceholder";
 
 //DO NOT try to use await and async promise handlers on action creators, without using the middleware
@@ -25,11 +27,15 @@ export const fetchPosts = () => {
 }
  */
 
-export const fetchUser = (userId) => async dispatch => {
+export const fetchUser = (userId) => (dispatch) => {
+  _fetchUser(userId, dispatch);
+}
+
+const _fetchUser = _.memoize( async (userId, dispatch) => {
   const response = await jsonPlaceholder.get(`/users/${userId}`);
 
   dispatch({
     type: 'FETCH_USER',
     payload: response.data
   })
-}
+});
