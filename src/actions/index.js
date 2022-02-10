@@ -15,17 +15,6 @@ export const fetchPosts = () => {
     });
   }
 }
-//A good refactor 
-/* export const fetchPosts = () => async dispatch => {
-  const response = await jsonPlaceholder.get('/posts');
-
-  //Using a middleware I need to dispatch the function into it 
-  dispatch({
-    type: 'FETCH_POSTS',
-    payload: response
-  });
-}
- */
 
 export const fetchUser = userId => async dispatch => {
   const response = await jsonPlaceholder.get(`/users/${userId}`);
@@ -39,6 +28,10 @@ export const fetchUser = userId => async dispatch => {
 export const fetchPostsAndUsers = () => async (dispatch, getState) => {
   await dispatch(fetchPosts());
 
-  const uniqueUsers = _.uniq(_.map(getState().posts, 'userId'));
-  uniqueUsers.forEach(userId => dispatch(fetchUser(userId)));
+  _.chain(getState().posts)
+    .map('userId')
+    .uniq()
+    .forEach(userId => dispatch(fetchUser(userId)))
+    //to execute the chain the value() is necesary
+    .value()
 }
